@@ -1,26 +1,21 @@
-  $key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMH5vcURnX5kK300U9zNlGCZsN7gWRqgUYqv/GVytM8i qwen-tts-deploy"
+  Write-Host "=== USER ==="
+  whoami
+  whoami /groups | Select-String "S-1-5-32-544"
 
-  # ユーザー用
-  $userSsh = Join-Path $env:USERPROFILE ".ssh"
-  $userAuth = Join-Path $userSsh "authorized_keys"
+  Write-Host "=== SSH CONFIG ==="
+  Get-Content C:\ProgramData\ssh\sshd_config |
+    Select-String "AuthorizedKeysFile|Match Group|PubkeyAuthentication"
 
-  New-Item -ItemType Directory -Force $userSsh | Out-Null
-  Set-Content -Path $userAuth -Value $key -Encoding ascii
+  Write-Host "=== ADMIN KEY ==="
+  Get-Content C:\ProgramData\ssh\administrators_authorized_keys
+  icacls C:\ProgramData\ssh\administrators_authorized_keys
+  ssh-keygen -lf C:\ProgramData\ssh\administrators_authorized_keys
 
-  icacls $userSsh /inheritance:r
-  icacls $userSsh /grant:r "$($env:USERNAME):(F)" "SYSTEM:(F)"
-  icacls $userAuth /inheritance:r
-  icacls $userAuth /grant:r "$($env:USERNAME):(F)" "SYSTEM:(F)"
+  Write-Host "=== USER KEY ==="
+  Get-Content "$env:USERPROFILE\.ssh\authorized_keys"
+  icacls "$env:USERPROFILE\.ssh\authorized_keys"
+  ssh-keygen -lf "$env:USERPROFILE\.ssh\authorized_keys"
 
-  # 管理者用
-  $adminAuth = "C:\ProgramData\ssh\administrators_authorized_keys"
-  Set-Content -Path $adminAuth -Value $key -Encoding ascii
-
-  icacls $adminAuth /inheritance:r
-  icacls $adminAuth /setowner "*S-1-5-32-544"
-  icacls $adminAuth /grant:r "*S-1-5-32-544:(F)" "SYSTEM:(F)"
-
-  Restart-Service sshd
-
-  Get-Content $userAuth
-  Get-Content $adminAuth
+  Write-Host "=== SSH LOG ==="
+  Get-WinEvent -LogName OpenSSH/Operational -MaxEvents 10 |
+    Format-List TimeCreated,Id,Message
