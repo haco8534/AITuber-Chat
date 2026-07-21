@@ -1,8 +1,84 @@
-Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-  Start-Service sshd
-  Set-Service sshd -StartupType Automatic
-  New-NetFirewallRule -Name sshd -DisplayName "OpenSSH Server" `
-    -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+PS C:\\Users\\Ikebe> ipconfig
 
-  ipconfig
-  whoami
+
+
+Windows IP 構成
+
+
+
+
+
+イーサネット アダプター イーサネット:
+
+
+
+&#x20;  接続固有の DNS サフィックス . . . . .: sys.fit.ac.jp
+
+&#x20;  リンクローカル IPv6 アドレス. . . . .: fe80::84ce:dcb9:ea5:d69%5
+
+&#x20;  IPv4 アドレス . . . . . . . . . . . .: 192.168.11.39
+
+&#x20;  サブネット マスク . . . . . . . . . .: 255.255.255.0
+
+&#x20;  デフォルト ゲートウェイ . . . . . . .: 192.168.11.1
+
+
+
+Wireless LAN adapter Wi-Fi:
+
+
+
+&#x20;  メディアの状態. . . . . . . . . . . .: メディアは接続されていません
+
+&#x20;  接続固有の DNS サフィックス . . . . .:
+
+
+
+Wireless LAN adapter Wi-Fi 4:
+
+
+
+&#x20;  メディアの状態. . . . . . . . . . . .: メディアは接続されていません
+
+&#x20;  接続固有の DNS サフィックス . . . . .:
+
+
+
+Wireless LAN adapter Wi-Fi 5:
+
+
+
+&#x20;  メディアの状態. . . . . . . . . . . .: メディアは接続されていません
+
+&#x20;  接続固有の DNS サフィックス . . . . .:
+
+
+
+イーサネット アダプター Bluetooth ネットワーク接続:
+
+
+
+&#x20;  メディアの状態. . . . . . . . . . . .: メディアは接続されていません
+
+&#x20;  接続固有の DNS サフィックス . . . . .:
+
+
+
+イーサネット アダプター vEthernet (WSL (Hyper-V firewall)):
+
+
+
+&#x20;  接続固有の DNS サフィックス . . . . .:
+
+&#x20;  リンクローカル IPv6 アドレス. . . . .: fe80::b6d1:9e9a:54a2:e55%25
+
+&#x20;  IPv4 アドレス . . . . . . . . . . . .: 172.29.48.1
+
+&#x20;  サブネット マスク . . . . . . . . . .: 255.255.240.0
+
+&#x20;  デフォルト ゲートウェイ . . . . . . .:
+
+PS C:\\Users\\Ikebe> whoami
+
+c04\\ikebe
+
