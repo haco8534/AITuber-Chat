@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>音声会話パイプライン デバッグコンソール</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>音声会話パイプライン デバッグコンソール</h1>
+  <div id="status-bar">
+    <span class="status-pill" id="status-stt">STT: -</span>
+    <span class="status-pill" id="status-llm">LLM: -</span>
+    <span class="status-pill" id="status-tts">TTS: -</span>
+    <button id="btn-refresh-status">再接続確認</button>
+  </div>
+</header>
+
+<div id="phase-bar">
+  <div class="phase-step" data-phase="stt"><span class="phase-icon">1</span><span>STT</span><span class="phase-time"></span></div>
+  <div class="phase-arrow">→</div>
+  <div class="phase-step" data-phase="llm"><span class="phase-icon">2</span><span>LLM</span><span class="phase-time"></span></div>
+  <div class="phase-arrow">→</div>
+  <div class="phase-step" data-phase="tts"><span class="phase-icon">3</span><span>TTS</span><span class="phase-time"></span></div>
+  <div class="phase-arrow">→</div>
+  <div class="phase-step" data-phase="play"><span class="phase-icon">4</span><span>再生</span><span class="phase-time"></span></div>
+  <div id="phase-badge">IDLE</div>
+</div>
+
+<main>
+  <section id="chat-column">
+    <div id="chat-log"></div>
+
+    <div id="input-row">
+      <button id="btn-mic" title="クリックで録音開始、もう一度クリックで停止して文字起こし">🎤 録音開始</button>
+      <input type="file" id="file-audio" accept="audio/*" hidden>
+      <button id="btn-upload" title="音声ファイルをアップロードして文字起こしのみ実行">📁 ファイルから文字起こし</button>
+      <input type="text" id="text-input" placeholder="メッセージを入力(または録音)" autocomplete="off">
+      <button id="btn-send">送信</button>
+      <button id="btn-reset" title="会話履歴をリセット">リセット</button>
+    </div>
+  </section>
+
+  <aside id="side-column">
+    <details open>
+      <summary>LLM設定</summary>
+      <label>モデル
+        <select id="llm-model"></select>
+      </label>
+      <label>system プロンプト
+        <textarea id="llm-system" rows="3" placeholder="(任意)"></textarea>
+      </label>
+      <label>temperature <output id="out-temperature">0.7</output>
+        <input type="range" id="llm-temperature" min="0" max="2" step="0.05" value="0.7">
+      </label>
+      <label>top_p <output id="out-top-p">0.9</output>
+        <input type="range" id="llm-top-p" min="0" max="1" step="0.05" value="0.9">
+      </label>
+      <label>num_predict(最大トークン)
+        <input type="number" id="llm-num-predict" value="256" min="1" max="4096">
+      </label>
+      <label class="checkbox-row"><input type="checkbox" id="llm-think"> thinkingを有効化</label>
+      <label class="checkbox-row"><input type="checkbox" id="llm-stream" checked> ストリーミング表示</label>
+    </details>
+
+    <details open>
+      <summary>TTS設定</summary>
+      <label>話者
+        <select id="tts-speaker"></select>
+      </label>
+      <label>言語
+        <select id="tts-language"></select>
+      </label>
+      <label>スタイル指示 instruct
+        <input type="text" id="tts-instruct" placeholder="(任意) 例: 明るく元気に">
+      </label>
+      <label class="checkbox-row"><input type="checkbox" id="tts-enabled" checked> TTSを実行する</label>
+    </details>
+
+    <details open>
+      <summary>処理ログ (トレース)</summary>
+      <div id="trace-log"></div>
+      <button id="btn-clear-log">ログクリア</button>
+    </details>
+  </aside>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

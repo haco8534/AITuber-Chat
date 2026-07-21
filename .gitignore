@@ -1,0 +1,17 @@
+# Python virtual environments
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Unity generated files
+UnityVoiceChat/Library/
+UnityVoiceChat/Temp/
+UnityVoiceChat/Obj/
+UnityVoiceChat/Logs/
+UnityVoiceChat/UserSettings/
+UnityVoiceChat/Build/
+UnityVoiceChat/Builds/
+UnityVoiceChat/MemoryCaptures/
+*.csproj
+*.sln
