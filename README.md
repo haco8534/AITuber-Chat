@@ -1,32 +1,21 @@
-PS C:\WINDOWS\system32>   Remove-ItemProperty `
->>     -Path "HKLM:\SOFTWARE\OpenSSH" `
->>     -Name DefaultShell `
->>     -ErrorAction SilentlyContinue
->>
->>   Remove-ItemProperty `
->>     -Path "HKLM:\SOFTWARE\OpenSSH" `
->>     -Name DefaultShellCommandOption `
->>     -ErrorAction SilentlyContinue
->>
->>   Remove-ItemProperty `
->>     -Path "HKLM:\SOFTWARE\OpenSSH" `
->>     -Name DefaultShellEscapeArguments `
->>     -ErrorAction SilentlyContinue
->>
->>   if (Test-Path "$env:USERPROFILE\.ssh\rc") {
->>       Move-Item `
->>         "$env:USERPROFILE\.ssh\rc" `
->>         "$env:USERPROFILE\.ssh\rc.disabled" `
->>         -Force
->>   }
->>
->>   Restart-Service sshd
-PS C:\WINDOWS\system32>   Get-ChildItem "$env:USERPROFILE\.ssh" -Force
+ Write-Host "=== Normal CMD ==="
+  cmd.exe /c hostname
 
+  Write-Host "=== CMD without AutoRun ==="
+  cmd.exe /d /c hostname
 
-    ディレクトリ: C:\Users\student\.ssh
+  Write-Host "=== User AutoRun ==="
+  Get-ItemProperty `
+    "HKCU:\Software\Microsoft\Command Processor" `
+    -Name AutoRun `
+    -ErrorAction SilentlyContinue
 
+  Write-Host "=== Machine AutoRun ==="
+  Get-ItemProperty `
+    "HKLM:\Software\Microsoft\Command Processor" `
+    -Name AutoRun `
+    -ErrorAction SilentlyContinue
 
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
--a----        2026/07/21     17:36             98 authorized_keys
+  Write-Host "=== ForceCommand ==="
+  Get-Content "C:\ProgramData\ssh\sshd_config" |
+    Select-String "ForceCommand|Match|AuthorizedKeysFile"
