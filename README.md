@@ -1,24 +1,8 @@
-PS C:\WINDOWS\system32>   cmd.exe /c hostname
->>   cmd.exe /d /c hostname
->>
->>   Get-ItemProperty `
->>     "HKCU:\Software\Microsoft\Command Processor" `
->>     -Name AutoRun `
->>     -ErrorAction SilentlyContinue
->>
->>   Get-ItemProperty `
->>     "HKLM:\Software\Microsoft\Command Processor" `
->>     -Name AutoRun `
->>     -ErrorAction SilentlyContinue
->>
->>   Get-Content "C:\ProgramData\ssh\sshd_config" |
->>     Select-String "ForceCommand|Match|AuthorizedKeysFile"
->>
-c04
-c04
+  New-ItemProperty `
+    -Path "HKLM:\SOFTWARE\OpenSSH" `
+    -Name DefaultShell `
+    -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" `
+    -PropertyType String `
+    -Force
 
-AuthorizedKeysFile      .ssh/authorized_keys
-#Match User anoncvs
-#       ForceCommand cvs server
-Match Group administrators
-       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+  Restart-Service sshd
