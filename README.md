@@ -5,4 +5,14 @@ New-ItemProperty `
     -PropertyType String `
     -Force
 
+  New-ItemProperty `
+    -Path "HKLM:\SOFTWARE\OpenSSH" `
+    -Name DefaultShellCommandOption `
+    -Value "-Command" `
+    -PropertyType String `
+    -Force
+
   Restart-Service sshd
+
+  Get-ItemProperty "HKLM:\SOFTWARE\OpenSSH" |
+    Select-Object DefaultShell,DefaultShellCommandOption
