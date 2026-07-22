@@ -1,27 +1,31 @@
- Write-Host "=== OpenSSH Registry ==="
-  Get-ItemProperty "HKLM:\SOFTWARE\OpenSSH" |
-    Format-List DefaultShell*
+  Remove-ItemProperty `
+    -Path "HKLM:\SOFTWARE\OpenSSH" `
+    -Name DefaultShell `
+    -ErrorAction SilentlyContinue
 
-  Write-Host "=== SSH user files ==="
-  Get-ChildItem "$env:USERPROFILE\.ssh" -Force |
-    Select-Object Name,Length
+  Remove-ItemProperty `
+    -Path "HKLM:\SOFTWARE\OpenSSH" `
+    -Name DefaultShellCommandOption `
+    -ErrorAction SilentlyContinue
+
+  Remove-ItemProperty `
+    -Path "HKLM:\SOFTWARE\OpenSSH" `
+    -Name DefaultShellEscapeArguments `
+    -ErrorAction SilentlyContinue
 
   if (Test-Path "$env:USERPROFILE\.ssh\rc") {
-      Write-Host "=== SSH RC ==="
-      Get-Content "$env:USERPROFILE\.ssh\rc" -Raw
+      Move-Item `
+        "$env:USERPROFILE\.ssh\rc" `
+        "$env:USERPROFILE\.ssh\rc.disabled" `
+        -Force
   }
 
-  Write-Host "=== SSHD CONFIG ==="
-  Get-Content "C:\ProgramData\ssh\sshd_config" |
-    Select-String "ForceCommand|Match|AuthorizedKeysFile|Subsystem"
+  Restart-Service sshd
 
-  Write-Host "=== SSHD SERVICE ==="
-  Get-CimInstance Win32_Service -Filter "Name='sshd'" |
-    Select-Object Name,State,PathName
 
-  Write-Host "=== PowerShell Profile ==="
-  $PROFILE
-  Test-Path $PROFILE
-  if (Test-Path $PROFILE) {
-      Get-Content $PROFILE -Raw
-  }
+
+
+  ^^^^^^^^^^^^^^^^^
+
+    Get-ItemProperty "HKLM:\SOFTWARE\OpenSSH" | Format-List DefaultShell*
+  Get-ChildItem "$env:USERPROFILE\.ssh" -Force
